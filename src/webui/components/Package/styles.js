@@ -197,3 +197,18 @@ export const WrapperLink = styled(Link)`
     `)};
   }
 `;
+
+/**
+ * Ayush's style
+ */
+
+export const PackageName = styled.span`
+  && {
+    font-weight: 600;
+    font-size: 20px;
+    display: block;
+    margin-bottom: 12px;
+    color: #414141;
+    cursor: pointer;
+  }
+`;

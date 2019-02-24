@@ -15,7 +15,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar2 from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 
 import Tag from '../Tag';
 import { formatDate, formatDateDistance } from '../../utils/package';
@@ -39,7 +38,9 @@ import {
   Field,
   Content,
   Footer,
+  PackageName
 } from './styles';
+import { fontWeight } from '../../utils/styles/sizes';
 
 const getInitialsName = (name: string) =>
   name
@@ -55,17 +56,16 @@ const Package = ({ name: label, version, time, author: { name, avatar }, descrip
     </MainInfo>
   );
 
-  const renderAuthorInfo = () => (
-    <Author>
-      <Avatar alt={name} src={avatar}>
-        {!avatar && getInitialsName(name)}
-      </Avatar>
-      <Details>
-        <Text text={name} weight={'bold'} />
-      </Details>
-    </Author>
-  );
-
+  const renderAuthorInfo = () => {
+    return (
+      <Author>
+        <Avatar alt={name} src={avatar} style={{ width: '20px', height: '20px' }}/>
+        <Details>
+          <Text text={name} />
+        </Details>
+      </Author>
+    );
+  }
   const renderLicenseInfo = () =>
     license && (
       <OverviewItem>
@@ -111,26 +111,33 @@ const Package = ({ name: label, version, time, author: { name, avatar }, descrip
   //     )}
   //   </WrapperLink>
   // );
+  const tags =  keywords.sort().map((keyword, index) => (
+    <Tag style={{ color: '#485A3E' }} key={index}>{keyword}</Tag>
+  )); 
 
   return (
-    <List>
+    <List style={{ padding: '20px 0 20px 0'}}>
       <ListItem alignItems="flex-start">
-        <ListItemAvatar>
+        {/* <ListItemAvatar>
           <Avatar2 alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary={label}
+        </ListItemAvatar> */}
+        <ListItemText component="div"
+          primary={<PackageName>{label}</PackageName>}
           secondary={
             <React.Fragment>
-              <Typography component="span" color="textPrimary">
-                {name}
+              <Typography component="span" style={{ color: '#586069', fontSize: '14px', paddingRight: 0 }}>
+                {description}
               </Typography>
-              {description}
+              {tags.length > 0 && <span style={{ marginTop: '15px', display: 'block' }}>
+                {tags}
+              </span>}
             </React.Fragment>
           }
         />
       </ListItem>
-      <Divider></Divider>
+      <ListItem alignItems="flex-start">
+        {renderAuthorInfo()}
+      </ListItem>
     </List>
   );
 };
