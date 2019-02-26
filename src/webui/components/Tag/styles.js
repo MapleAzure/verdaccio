@@ -14,7 +14,7 @@ export const Wrapper = styled.span`
     color: #485a3e;
     background-color: #f3f4f2;
     padding: 0.22rem 0.4rem;
-    margin: 5px 10px 0 0;
+    margin: 8px 8px 0 0;
     ${ellipsis('300px')};
   }
 `;

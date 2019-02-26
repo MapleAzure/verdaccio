@@ -52,8 +52,9 @@ export const OverviewItem = styled.span`
   && {
     display: flex;
     align-items: center;
-    margin: 0 0 5px 0;
-    color: ${colors.greyLight};
+    margin: 0 0 0 16px;
+    color: #908ba1;
+    font-size: 16px;
   }
 `;
 
@@ -83,15 +84,14 @@ export const Version = styled.span`
 
 export const Icon = styled(Ico)`
   && {
-    margin: 1px 5px 0 0;
-    fill: ${colors.greyLight};
+    margin: 0px 10px 0px 0;
+    fill: #908ba1;
   }
 `;
 
 export const Published = styled.span`
   && {
-    display: none;
-    color: ${colors.greyLight};
+    color: #908ba1;
     ${({ modifiers }) => modifiers};
   }
 `;
@@ -178,7 +178,7 @@ export const WrapperLink = styled(Link)`
         align-items: center;
       }
       ${OverviewItem} {
-        margin: 0 0 0 10px;
+        margin: 0 0 0 0;
       }
       ${Overview} {
         flex-direction: row;
@@ -210,5 +210,9 @@ export const PackageName = styled.span`
     margin-bottom: 12px;
     color: #414141;
     cursor: pointer;
+
+    &:hover {
+      color: black;
+    }
   }
 `;

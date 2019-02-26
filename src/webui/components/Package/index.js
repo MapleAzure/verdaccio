@@ -9,14 +9,21 @@ import React from 'react';
 import type { Element } from 'react';
 import { spacing } from '../../utils/styles/mixings';
 
+import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar2 from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import BugReport from '@material-ui/icons/BugReport';
+import Tooltip from '@material-ui/core/Tooltip';
+import HomeIcon from '@material-ui/icons/Home';
+import BookmarkBorder from '@material-ui/icons/BookmarkBorder';
 
 import Tag from '../Tag';
+import fileSizeSI from '../../utils/file-size';
 import { formatDate, formatDateDistance } from '../../utils/package';
 
 import { IProps } from './types';
@@ -48,13 +55,14 @@ const getInitialsName = (name: string) =>
     .reduce((accumulator, currentValue) => accumulator.charAt(0) + currentValue.charAt(0), '')
     .toUpperCase();
 
-const Package = ({ name: label, version, time, author: { name, avatar }, description, license, keywords = [] }: IProps): Element<WrapperLink> => {
-  const renderMainInfo = () => (
-    <MainInfo>
-      <Name>{label}</Name>
-      <Version>{`v${version}`}</Version>
-    </MainInfo>
-  );
+const Package = ({ name: label, version, dist: { unpackedSize } = {}, time, author: { name, avatar }, description, license, keywords = [] }: IProps): Element<WrapperLink> => {
+  console.log(unpackedSize);
+  const renderVersionInfo = () => version && (
+        <OverviewItem>
+          <Icon name={'version'} />
+          {`v${version}`}
+        </OverviewItem>
+      );
 
   const renderAuthorInfo = () => {
     return (
@@ -66,17 +74,25 @@ const Package = ({ name: label, version, time, author: { name, avatar }, descrip
       </Author>
     );
   }
+
+  const renderFileSize = () => unpackedSize && (
+    <OverviewItem>
+      <Icon name={'filebinary'} />
+      {fileSizeSI(unpackedSize)}
+    </OverviewItem>
+  );
+
   const renderLicenseInfo = () =>
     license && (
       <OverviewItem>
-        <Icon modifiers={spacing('margin', '4px', '5px', '0px', '0px')} name={'license'} pointer={true} />
+        <Icon name={'law'} />
         {license}
       </OverviewItem>
     );
 
   const renderPublishedInfo = () => (
     <OverviewItem>
-      <Icon name={'time'} pointer={true} />
+      <Icon name={'time'} />
       <Published modifiers={spacing('margin', '0px', '5px', '0px', '0px')}>{`Published on ${formatDate(time)} •`}</Published>
       {`${formatDateDistance(time)} ago`}
     </OverviewItem>
@@ -116,19 +132,42 @@ const Package = ({ name: label, version, time, author: { name, avatar }, descrip
   )); 
 
   return (
-    <List style={{ padding: '20px 0 20px 0'}}>
+    <List style={{ padding: '12px 0 12px 0'}}>
       <ListItem alignItems="flex-start">
         {/* <ListItemAvatar>
           <Avatar2 alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
         </ListItemAvatar> */}
-        <ListItemText component="div"
-          primary={<PackageName>{label}</PackageName>}
+        <ListItemText component="div" style={{ paddingRight: 0}}
+          primary={
+            <Grid item xs={12} container>
+              <Grid item xs>
+                <PackageName>{label}</PackageName>
+              </Grid>
+              <Grid item xs style={{ textAlign: "right" }}>
+                <Tooltip title="Visit homepage" aria-label="Add">
+                  <IconButton aria-label="Report" style={{ padding: '6px' }}>
+                    <HomeIcon fontSize="small" style={{ fontSize: '16px' }} />
+                  </IconButton>
+                </Tooltip> 
+                <Tooltip title="Open an issue" aria-label="Add">
+                  <IconButton aria-label="Report" style={{ padding: '6px' }}>
+                    <BugReport fontSize="small" style={{ fontSize: '16px' }} />
+                  </IconButton>   
+                </Tooltip>
+                <Tooltip title="Pin it" aria-label="Add">
+                  <IconButton aria-label="Report" style={{ padding: '6px' }}>
+                    <BookmarkBorder fontSize="small" style={{ fontSize: '16px' }} />
+                  </IconButton>
+                </Tooltip>          
+              </Grid>
+            </Grid>
+          }
           secondary={
             <React.Fragment>
               <Typography component="span" style={{ color: '#586069', fontSize: '14px', paddingRight: 0 }}>
                 {description}
               </Typography>
-              {tags.length > 0 && <span style={{ marginTop: '15px', display: 'block' }}>
+              {tags.length > 0 && <span style={{ marginTop: '8px', display: 'block' }}>
                 {tags}
               </span>}
             </React.Fragment>
@@ -137,6 +176,10 @@ const Package = ({ name: label, version, time, author: { name, avatar }, descrip
       </ListItem>
       <ListItem alignItems="flex-start">
         {renderAuthorInfo()}
+        {renderVersionInfo()}
+        {renderPublishedInfo()}
+        {renderFileSize()}
+        {renderLicenseInfo()}
       </ListItem>
     </List>
   );
